@@ -19,7 +19,7 @@ function posix-source --description='Source env files'
       		Source one or more env files
 
 
-      OPTIONS
+      OPTIONS:
 
       	-p, --print
       		Print the commands to STDOUT
