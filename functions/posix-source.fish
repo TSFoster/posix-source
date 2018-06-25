@@ -1,9 +1,11 @@
-function posix-source -d "Source env files"
+function posix-source --description='Source env files'
   set -l options \
     (fish_opt --short=h --long=help) \
     (fish_opt --short=p --long=print) \
     (fish_opt --short=n --long=no-interpret)
   argparse $options -- $argv
+
+  [ (count $argv ) -eq 0 ]; and set _flag_help
 
   if set -q _flag_help
     set fn (status function)
