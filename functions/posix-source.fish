@@ -32,16 +32,22 @@ function posix-source --description='Source env files'
   end
 
 
-  for i in (cat $argv)
-    set arr (string split -m1 = $i)
-
-    set -q _flag_print
-    and echo set -gx $arr[1] $arr[2]\;
+  for file in $argv
+    not [ -f $file ]
+    and echo "$file is not a file!" >&2
     and continue
 
-    set -q _flag_no_interpret
-    and set -gx $arr[1] $arr[2]
-    or eval "set -gx $arr[1] $arr[2]"
+    for instruction in (cat $file)
+      set arr (string split -m1 = $instruction)
+
+      set -q _flag_print
+      and echo set -gx $arr[1] $arr[2]\;
+      and continue
+
+      set -q _flag_no_interpret
+      and set -gx $arr[1] $arr[2]
+      or eval "set -gx $arr[1] $arr[2]"
+    end
   end
 
   return 0
