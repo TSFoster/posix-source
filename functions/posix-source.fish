@@ -43,4 +43,6 @@ function posix-source --description='Source env files'
     and set -gx $arr[1] $arr[2]
     or eval "set -gx $arr[1] $arr[2]"
   end
+
+  return 0
 end
