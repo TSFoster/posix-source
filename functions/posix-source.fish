@@ -4,7 +4,8 @@ function posix-source --description='Source env files'
     (fish_opt --short=p --long=print) \
     (fish_opt --short=n --long=no-interpret) \
     (fish_opt --short=G --long=no-global) \
-    (fish_opt --short=u --long=unexport)
+    (fish_opt --short=u --long=unexport) \
+    (fish_opt --short=e --long=erase)
   argparse $options -- $argv
 
   [ (count $argv ) -eq 0 ]; and set _flag_help
@@ -36,7 +37,10 @@ function posix-source --description='Source env files'
 
       	-n, --no-interpret
       		By default, variables in env files will be interpreted. Pass
-      		this argument to interpret dollar signs as literal characters." \
+      		this argument to interpret dollar signs as literal characters.
+
+      	-e, --erase
+      		Erase all variables listed in the given file(s)." \
     | string replace --all --regex '(^ +)' ''
     return 0
   end
@@ -55,6 +59,16 @@ function posix-source --description='Source env files'
 
     for instruction in (cat $file)
       set arr (string split -m1 = $instruction)
+
+      set -q _flag_erase
+      and set -q _flag_print
+      and echo set -e $arr[1]\;
+      and continue
+
+      if set -q _flag_erase
+        set -e $arr[1]
+        continue
+      end
 
       set -q _flag_print
       and echo set $setFlags $arr[1] $arr[2]\;
